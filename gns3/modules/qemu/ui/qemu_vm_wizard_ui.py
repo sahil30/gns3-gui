@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file '/Users/noplay/code/gns3/gns3-gui/gns3/modules/qemu/ui/qemu_vm_wizard.ui'
 #
-# Created: Fri Apr 24 10:41:48 2015
+# Created: Thu Apr 30 11:31:08 2015
 #      by: PyQt5 UI code generator 5.4
 #
 # WARNING! All changes made in this file will be lost!
@@ -10,7 +10,7 @@
 from gns3.qt import QtCore, QtGui, QtWidgets
 
 
-class Ui_QemuVMWizard:
+class Ui_QemuVMWizard(object):
 
     def setupUi(self, QemuVMWizard):
         QemuVMWizard.setObjectName("QemuVMWizard")
@@ -134,6 +134,11 @@ class Ui_QemuVMWizard:
         self.uiHdaDiskImageLabel.setObjectName("uiHdaDiskImageLabel")
         self.horizontalLayout_8.addWidget(self.uiHdaDiskImageLabel)
         self.uiHdaDiskImageListComboBox = QtWidgets.QComboBox(self.uiDiskWizardPage)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Fixed)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.uiHdaDiskImageListComboBox.sizePolicy().hasHeightForWidth())
+        self.uiHdaDiskImageListComboBox.setSizePolicy(sizePolicy)
         self.uiHdaDiskImageListComboBox.setObjectName("uiHdaDiskImageListComboBox")
         self.horizontalLayout_8.addWidget(self.uiHdaDiskImageListComboBox)
         self.uiHdaDiskImageLineEdit = QtWidgets.QLineEdit(self.uiDiskWizardPage)

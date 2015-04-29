@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file '/Users/noplay/code/gns3/gns3-gui/gns3/modules/dynamips/ui/ios_router_wizard.ui'
 #
-# Created: Fri Apr 24 10:41:48 2015
+# Created: Thu Apr 30 11:30:20 2015
 #      by: PyQt5 UI code generator 5.4
 #
 # WARNING! All changes made in this file will be lost!
@@ -10,7 +10,7 @@
 from gns3.qt import QtCore, QtGui, QtWidgets
 
 
-class Ui_IOSRouterWizard:
+class Ui_IOSRouterWizard(object):
 
     def setupUi(self, IOSRouterWizard):
         IOSRouterWizard.setObjectName("IOSRouterWizard")
@@ -82,6 +82,11 @@ class Ui_IOSRouterWizard:
         self.horizontalLayout_5 = QtWidgets.QHBoxLayout()
         self.horizontalLayout_5.setObjectName("horizontalLayout_5")
         self.uiIOSImageListComboBox = QtWidgets.QComboBox(self.uiIOSImageWizardPage)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Fixed)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.uiIOSImageListComboBox.sizePolicy().hasHeightForWidth())
+        self.uiIOSImageListComboBox.setSizePolicy(sizePolicy)
         self.uiIOSImageListComboBox.setObjectName("uiIOSImageListComboBox")
         self.horizontalLayout_5.addWidget(self.uiIOSImageListComboBox)
         self.uiIOSImageLineEdit = QtWidgets.QLineEdit(self.uiIOSImageWizardPage)
