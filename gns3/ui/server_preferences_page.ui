@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>435</width>
-    <height>445</height>
+    <width>460</width>
+    <height>536</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -17,7 +17,7 @@
    <item>
     <widget class="QTabWidget" name="uiTabWidget">
      <property name="currentIndex">
-      <number>0</number>
+      <number>1</number>
      </property>
      <widget class="QWidget" name="uiLocalTabWidget">
       <attribute name="title">
@@ -234,42 +234,27 @@
        <string>Remote servers</string>
       </attribute>
       <layout class="QGridLayout" name="gridLayout_2">
-       <item row="0" column="0" colspan="2">
-        <widget class="QTreeWidget" name="uiRemoteServersTreeWidget">
-         <column>
-          <property name="text">
-           <string>Host</string>
-          </property>
-         </column>
-         <column>
-          <property name="text">
-           <string>Port</string>
-          </property>
-         </column>
-        </widget>
-       </item>
-       <item row="1" column="0">
-        <widget class="QLabel" name="uiRemoteServerHostLabel">
+       <item row="6" column="0">
+        <widget class="QLabel" name="uiRemoteServerProtocolLabel">
          <property name="text">
-          <string>Host:</string>
+          <string>Protocol:</string>
          </property>
         </widget>
        </item>
-       <item row="2" column="0" colspan="2">
-        <widget class="QLineEdit" name="uiRemoteServerPortLineEdit">
-         <property name="text">
-          <string>192.168.56.101</string>
+       <item row="10" column="0" colspan="2">
+        <spacer name="spacer_2">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
          </property>
-        </widget>
-       </item>
-       <item row="3" column="0">
-        <widget class="QLabel" name="uiRemoteServerPortLabel">
-         <property name="text">
-          <string>Port:</string>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>390</width>
+           <height>12</height>
+          </size>
          </property>
-        </widget>
+        </spacer>
        </item>
-       <item row="5" column="0">
+       <item row="9" column="0">
         <layout class="QHBoxLayout" name="horizontalLayout_3">
          <item>
           <widget class="QPushButton" name="uiAddRemoteServerPushButton">
@@ -290,31 +275,48 @@
          </item>
         </layout>
        </item>
-       <item row="5" column="1">
-        <spacer name="horizontalSpacer_2">
-         <property name="orientation">
-          <enum>Qt::Horizontal</enum>
+       <item row="2" column="0" colspan="2">
+        <widget class="QLineEdit" name="uiRemoteServerPortLineEdit">
+         <property name="text">
+          <string>192.168.56.101</string>
          </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>206</width>
-           <height>20</height>
-          </size>
-         </property>
-        </spacer>
+        </widget>
        </item>
-       <item row="6" column="0" colspan="2">
-        <spacer name="spacer_2">
-         <property name="orientation">
-          <enum>Qt::Vertical</enum>
+       <item row="3" column="0">
+        <widget class="QLabel" name="uiRemoteServerPortLabel">
+         <property name="text">
+          <string>Port:</string>
          </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>390</width>
-           <height>12</height>
-          </size>
+        </widget>
+       </item>
+       <item row="1" column="0">
+        <widget class="QLabel" name="uiRemoteServerHostLabel">
+         <property name="text">
+          <string>Host:</string>
          </property>
-        </spacer>
+        </widget>
+       </item>
+       <item row="0" column="0" colspan="2">
+        <widget class="QTreeWidget" name="uiRemoteServersTreeWidget">
+         <property name="columnCount">
+          <number>3</number>
+         </property>
+         <column>
+          <property name="text">
+           <string notr="true">1</string>
+          </property>
+         </column>
+         <column>
+          <property name="text">
+           <string notr="true">2</string>
+          </property>
+         </column>
+         <column>
+          <property name="text">
+           <string notr="true">3</string>
+          </property>
+         </column>
+        </widget>
        </item>
        <item row="4" column="0" colspan="2">
         <widget class="QSpinBox" name="uiRemoteServerPortSpinBox">
@@ -329,7 +331,52 @@
          </property>
         </widget>
        </item>
+       <item row="9" column="1">
+        <spacer name="horizontalSpacer_2">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>206</width>
+           <height>20</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item row="7" column="0">
+        <widget class="QComboBox" name="uiRemoteServerComboBox">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="currentText">
+          <string>HTTP</string>
+         </property>
+         <item>
+          <property name="text">
+           <string>HTTP</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>SSH</string>
+          </property>
+         </item>
+        </widget>
+       </item>
       </layout>
+      <zorder>spacer_2</zorder>
+      <zorder>uiRemoteServerPortLabel</zorder>
+      <zorder>uiRemoteServerPortSpinBox</zorder>
+      <zorder>uiRemoteServerHostLabel</zorder>
+      <zorder>uiRemoteServerPortLineEdit</zorder>
+      <zorder>uiRemoteServersTreeWidget</zorder>
+      <zorder>horizontalSpacer_2</zorder>
+      <zorder>uiRemoteServerProtocolLabel</zorder>
+      <zorder>uiRemoteServerComboBox</zorder>
      </widget>
     </widget>
    </item>
