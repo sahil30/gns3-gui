@@ -61,6 +61,8 @@ class HTTPClient(QtCore.QObject):
         self.scheme = url_settings.scheme
         self.host = url_settings.netloc.split(":")[0]
         self.port = url_settings.port
+        self.protocol = "http"
+        self.user = ""
 
         self._connected = False
         self._local = True

@@ -135,8 +135,10 @@ class ServerPreferencesPage(QtWidgets.QWidget, Ui_ServerPreferencesPageWidget):
         Adds a new remote server.
         """
 
+        protocol = self.uiRemoteServerProtocolComboBox.currentText().lower()
         host = self.uiRemoteServerPortLineEdit.text().strip()
         port = self.uiRemoteServerPortSpinBox.value()
+        user = self.uiRemoteServerUserLineEdit.text()
 
         if not re.match(r"^[a-zA-Z0-9\.{}-]+$".format("\u0370-\u1CDF\u2C00-\u30FF\u4E00-\u9FBF"), host):
             QtGui.QMessageBox.critical(self, "Remote server", "Invalid remote server hostname {}".format(host))
@@ -146,19 +148,23 @@ class ServerPreferencesPage(QtWidgets.QWidget, Ui_ServerPreferencesPageWidget):
             return
 
         # check if the remote server is already defined
-        remote_server = "{host}:{port}".format(host=host, port=port)
+        remote_server = "{protocol}://{user}@{host}:{port}".format(protocol=protocol, user=user, host=host, port=port)
         if remote_server in self._remote_servers:
             QtWidgets.QMessageBox.critical(self, "Remote server", "Remote server {} is already defined.".format(remote_server))
             return
 
         # add a new entry in the tree widget
         item = QtWidgets.QTreeWidgetItem(self.uiRemoteServersTreeWidget)
-        item.setText(0, host)
-        item.setText(1, str(port))
+        item.setText(0, protocol)
+        item.setText(1, host)
+        item.setText(2, str(port))
+        item.setText(3, user)
 
         # keep track of this remote server
-        self._remote_servers[remote_server] = {"host": host,
-                                               "port": port}
+        self._remote_servers[remote_server] = {"protocol": protocol,
+                                               "host": host,
+                                               "port": port,
+                                               "user": user}
 
         self.uiRemoteServerPortSpinBox.setValue(self.uiRemoteServerPortSpinBox.value() + 1)
         self.uiRemoteServersTreeWidget.resizeColumnToContents(0)
@@ -170,9 +176,11 @@ class ServerPreferencesPage(QtWidgets.QWidget, Ui_ServerPreferencesPageWidget):
 
         item = self.uiRemoteServersTreeWidget.currentItem()
         if item:
-            host = item.text(0)
-            port = int(item.text(1))
-            remote_server = "{host}:{port}".format(host=host, port=port)
+            protocol = item.text(0)
+            host = item.text(1)
+            port = int(item.text(2))
+            user = item.text(3)
+            remote_server = "{protocol}://{user}@{host}:{port}".format(protocol=protocol, user=user, host=host, port=port)
             del self._remote_servers[remote_server]
             self.uiRemoteServersTreeWidget.takeTopLevelItem(self.uiRemoteServersTreeWidget.indexOfTopLevelItem(item))
 
@@ -210,13 +218,19 @@ class ServerPreferencesPage(QtWidgets.QWidget, Ui_ServerPreferencesPageWidget):
         self._remote_servers.clear()
         self.uiRemoteServersTreeWidget.clear()
         for server_id, server in servers.remoteServers().items():
+            protocol = server.protocol
             host = server.host
             port = server.port
-            self._remote_servers[server_id] = {"host": host,
-                                               "port": port}
+            user = server.user
+            self._remote_servers[server_id] = {"protocol": protocol,
+                                               "host": host,
+                                               "port": port,
+                                               "user": user}
             item = QtWidgets.QTreeWidgetItem(self.uiRemoteServersTreeWidget)
-            item.setText(0, host)
-            item.setText(1, str(port))
+            item.setText(0, protocol)
+            item.setText(1, host)
+            item.setText(2, str(port))
+            item.setText(3, user)
 
         self.uiRemoteServersTreeWidget.resizeColumnToContents(0)
 
