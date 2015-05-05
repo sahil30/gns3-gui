@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'server_preferences_page.ui'
 #
-# Created: Wed May  6 16:11:36 2015
+# Created: Wed May  6 16:12:08 2015
 #      by: PyQt5 UI code generator 5.4
 #
 # WARNING! All changes made in this file will be lost!
@@ -196,9 +196,24 @@ class Ui_ServerPreferencesPageWidget(object):
         self.retranslateUi(ServerPreferencesPageWidget)
         self.uiTabWidget.setCurrentIndex(1)
         QtCore.QMetaObject.connectSlotsByName(ServerPreferencesPageWidget)
-        ServerPreferencesPageWidget.setTabOrder(self.uiLocalServerPathLineEdit, self.uiLocalServerToolButton)
-        ServerPreferencesPageWidget.setTabOrder(self.uiLocalServerToolButton, self.uiLocalServerPortSpinBox)
-        ServerPreferencesPageWidget.setTabOrder(self.uiLocalServerPortSpinBox, self.uiRemoteServerPortSpinBox)
+        ServerPreferencesPageWidget.setTabOrder(self.uiTabWidget, self.uiLocalServerAutoStartCheckBox)
+        ServerPreferencesPageWidget.setTabOrder(self.uiLocalServerAutoStartCheckBox, self.uiLocalServerToolButton)
+        ServerPreferencesPageWidget.setTabOrder(self.uiLocalServerToolButton, self.uiLocalServerHostComboBox)
+        ServerPreferencesPageWidget.setTabOrder(self.uiLocalServerHostComboBox, self.uiLocalServerPortSpinBox)
+        ServerPreferencesPageWidget.setTabOrder(self.uiLocalServerPortSpinBox, self.uiConsoleConnectionsToAnyIPCheckBox)
+        ServerPreferencesPageWidget.setTabOrder(self.uiConsoleConnectionsToAnyIPCheckBox, self.uiConsoleStartPortSpinBox)
+        ServerPreferencesPageWidget.setTabOrder(self.uiConsoleStartPortSpinBox, self.uiConsoleEndPortSpinBox)
+        ServerPreferencesPageWidget.setTabOrder(self.uiConsoleEndPortSpinBox, self.uiUDPStartPortSpinBox)
+        ServerPreferencesPageWidget.setTabOrder(self.uiUDPStartPortSpinBox, self.uiUDPEndPortSpinBox)
+        ServerPreferencesPageWidget.setTabOrder(self.uiUDPEndPortSpinBox, self.uiLocalServerPathLineEdit)
+        ServerPreferencesPageWidget.setTabOrder(self.uiLocalServerPathLineEdit, self.uiRemoteServersTreeWidget)
+        ServerPreferencesPageWidget.setTabOrder(self.uiRemoteServersTreeWidget, self.uiRemoteServerProtocolComboBox)
+        ServerPreferencesPageWidget.setTabOrder(self.uiRemoteServerProtocolComboBox, self.uiRemoteServerPortLineEdit)
+        ServerPreferencesPageWidget.setTabOrder(self.uiRemoteServerPortLineEdit, self.uiRemoteServerPortSpinBox)
+        ServerPreferencesPageWidget.setTabOrder(self.uiRemoteServerPortSpinBox, self.uiRemoteServerUserLineEdit)
+        ServerPreferencesPageWidget.setTabOrder(self.uiRemoteServerUserLineEdit, self.uiAddRemoteServerPushButton)
+        ServerPreferencesPageWidget.setTabOrder(self.uiAddRemoteServerPushButton, self.uiDeleteRemoteServerPushButton)
+        ServerPreferencesPageWidget.setTabOrder(self.uiDeleteRemoteServerPushButton, self.uiRestoreDefaultsPushButton)
 
     def retranslateUi(self, ServerPreferencesPageWidget):
         _translate = gns3.qt.translate

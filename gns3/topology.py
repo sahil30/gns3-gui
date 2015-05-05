@@ -606,9 +606,11 @@ class Topology:
                 elif "cloud" in topology_server and topology_server["cloud"]:
                     self._servers[topology_server["id"]] = server_manager.anyCloudServer()
                 else:
+                    protocol = topology_server.get("protocol", "http")
                     host = topology_server["host"]
                     port = topology_server["port"]
-                    self._servers[topology_server["id"]] = server_manager.getRemoteServer(host, port)
+                    user = topology_server.get("user", None)
+                    self._servers[topology_server["id"]] = server_manager.getRemoteServer(protocol, host, port, user)
 
         # nodes
         self._load_old_topology = False

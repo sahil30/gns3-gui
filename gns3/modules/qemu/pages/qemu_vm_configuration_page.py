@@ -254,8 +254,7 @@ class QemuVMConfigurationPage(QtWidgets.QWidget, Ui_QemuVMConfigPageWidget):
             if server == "local":
                 server = Servers.instance().localServer()
             elif ":" in server:
-                host, port = server.rsplit(":")
-                server = Servers.instance().getRemoteServer(host, port)
+                server = Servers.instance().getServerFromString(server)
 
         callback = partial(self._getQemuBinariesFromServerCallback, qemu_path=settings["qemu_path"])
         try:

@@ -52,6 +52,7 @@ class ServerPreferencesPage(QtWidgets.QWidget, Ui_ServerPreferencesPageWidget):
         self.uiRemoteServersTreeWidget.itemSelectionChanged.connect(self._remoteServerChangedSlot)
         self.uiRestoreDefaultsPushButton.clicked.connect(self._restoreDefaultsSlot)
         self.uiLocalServerAutoStartCheckBox.stateChanged.connect(self._useLocalServerAutoStartSlot)
+        self.uiRemoteServerProtocolComboBox.currentIndexChanged.connect(self._remoteServerProtocolCurrentIndexSlot)
 
         # load all available addresses
         for address in QtNetwork.QNetworkInterface.allAddresses():
@@ -66,6 +67,13 @@ class ServerPreferencesPage(QtWidgets.QWidget, Ui_ServerPreferencesPageWidget):
         index = self.uiLocalServerHostComboBox.findText("127.0.0.1")
         if index != -1:
             self.uiLocalServerHostComboBox.setCurrentIndex(index)
+
+    def _remoteServerProtocolCurrentIndexSlot(self, index):
+        if self.uiRemoteServerProtocolComboBox.currentText() == "SSH":
+            self.uiRemoteServerPortSpinBox.setValue(22)
+        else:
+            self.uiRemoteServerPortSpinBox.setValue(8000)
+
 
     def _useLocalServerAutoStartSlot(self, state):
         """
@@ -110,14 +118,18 @@ class ServerPreferencesPage(QtWidgets.QWidget, Ui_ServerPreferencesPageWidget):
         :param column: ignored
         """
 
-        host = item.text(0)
+        protocol = item.text(0).upper()
+        host = item.text(1)
         try:
-            port = int(item.text(1))
+            port = int(item.text(2))
         except ValueError:
             QtWidgets.QMessageBox.critical(self, "Remote server", "Invalid port")
             return
+        user = item.text(3)
+        self.uiRemoteServerProtocolComboBox.setCurrentIndex(self.uiRemoteServerProtocolComboBox.findText(protocol))
         self.uiRemoteServerPortLineEdit.setText(host)
         self.uiRemoteServerPortSpinBox.setValue(port)
+        self.uiRemoteServerUserLineEdit.setText(user)
 
     def _remoteServerChangedSlot(self):
         """
@@ -138,7 +150,7 @@ class ServerPreferencesPage(QtWidgets.QWidget, Ui_ServerPreferencesPageWidget):
         protocol = self.uiRemoteServerProtocolComboBox.currentText().lower()
         host = self.uiRemoteServerPortLineEdit.text().strip()
         port = self.uiRemoteServerPortSpinBox.value()
-        user = self.uiRemoteServerUserLineEdit.text()
+        user = self.uiRemoteServerUserLineEdit.text().strip()
 
         if not re.match(r"^[a-zA-Z0-9\.{}-]+$".format("\u0370-\u1CDF\u2C00-\u30FF\u4E00-\u9FBF"), host):
             QtGui.QMessageBox.critical(self, "Remote server", "Invalid remote server hostname {}".format(host))
@@ -179,8 +191,11 @@ class ServerPreferencesPage(QtWidgets.QWidget, Ui_ServerPreferencesPageWidget):
             protocol = item.text(0)
             host = item.text(1)
             port = int(item.text(2))
-            user = item.text(3)
-            remote_server = "{protocol}://{user}@{host}:{port}".format(protocol=protocol, user=user, host=host, port=port)
+            user = item.text(3).strip()
+            if len(user) > 0:
+                remote_server = "{protocol}://{user}@{host}:{port}".format(protocol=protocol, user=user, host=host, port=port)
+            else:
+                remote_server = "{protocol}://{host}:{port}".format(protocol=protocol, user=user, host=host, port=port)
             del self._remote_servers[remote_server]
             self.uiRemoteServersTreeWidget.takeTopLevelItem(self.uiRemoteServersTreeWidget.indexOfTopLevelItem(item))
 

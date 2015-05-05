@@ -23,6 +23,7 @@ import sys
 import os
 import shlex
 import signal
+import urllib
 import shutil
 import subprocess
 
@@ -109,7 +110,7 @@ class Servers(QtCore.QObject):
             host = settings.value("host", "")
             port = settings.value("port", 0, type=int)
             if host and port:
-                self._addRemoteServer(host, port)
+                self._addRemoteServer("http", host, port, None)
         settings.endArray()
         settings.remove("")
         settings.endGroup()
@@ -124,7 +125,7 @@ class Servers(QtCore.QObject):
         settings = local_config.settings()
         if "RemoteServers" in settings:
             for remote_server in settings["RemoteServers"]:
-                self._addRemoteServer(remote_server["host"], remote_server["port"])
+                self._addRemoteServer(remote_server.get("protocol", "http"), remote_server["host"], remote_server["port"], remote_server.get("user", None))
 
         # keep the config file sync
         self._saveSettings()
@@ -141,8 +142,10 @@ class Servers(QtCore.QObject):
         # save the remote servers
         remote_servers = []
         for server in self._remote_servers.values():
-            remote_servers.append({"host": server.host,
-                                   "port": server.port})
+            remote_servers.append({"protocol": server.protocol,
+                                   "host": server.host,
+                                   "port": server.port,
+                                   "user": server.user})
         LocalConfig.instance().setSettings({"RemoteServers": remote_servers})
 
         # save some settings to the local server config files
@@ -293,39 +296,45 @@ class Servers(QtCore.QObject):
 
         return self._local_server
 
-    def _addRemoteServer(self, host, port):
+    def _addRemoteServer(self, protocol, host, port, user):
         """
         Adds a new remote server.
 
+        :param protocol: Server protocol
         :param host: host or address of the server
         :param port: port of the server (integer)
+        :param user: user login
 
         :returns: the new remote server
         """
 
         server_socket = "{host}:{port}".format(host=host, port=port)
-        url = "http://{server_socket}".format(server_socket=server_socket)
+        if user and len(user) > 0:
+            server_socket = "{user}@{server_socket}".format(user=user, server_socket=server_socket)
+        url = "{protocol}://{server_socket}".format(protocol=protocol, server_socket=server_socket)
         server = HTTPClient(url, self._network_manager)
         server.setLocal(False)
-        self._remote_servers[server_socket] = server
+        self._remote_servers[url] = server
         log.info("New remote server connection {} registered".format(url))
         return server
 
-    def getRemoteServer(self, host, port):
+    def getRemoteServer(self, protocol, host, port, user):
         """
         Gets a remote server.
 
+        :param protocol: server protocol (http/ssh)
         :param host: host address
         :param port: port
+        :param user: the username
 
         :returns: remote server (HTTPClient instance)
         """
 
         for server in self._remote_servers.values():
-            if server.host == host and int(server.port) == int(port):
+            if server.protocol == protocol and server.host == host and int(server.port) == int(port) and server.user == user:
                 return server
 
-        return self._addRemoteServer(host, port)
+        return self._addRemoteServer(protocol, host, port, user)
 
     def getServerFromString(self, string):
         """
@@ -335,8 +344,12 @@ class Servers(QtCore.QObject):
         if string == "local":
             return self._local_server
 
-        (host, port) = string.split(":")
-        return self.getRemoteServer(host, port)
+        if "://" in string:
+            url_settings = urllib.parse.urlparse(string)
+            return self.getRemoteServer(url_settings.scheme, url_settings.hostname, url_settings.port, url_settings.username)
+        else:
+            (host, port) = string.split(":")
+            return self.getRemoteServer("http", host, port, None)
 
     def updateRemoteServers(self, servers):
         """
@@ -356,9 +369,14 @@ class Servers(QtCore.QObject):
             if server_id in self._remote_servers:
                 continue
 
+            protocol = server["protocol"]
             host = server["host"]
             port = server["port"]
-            url = "http://{host}:{port}".format(host=host, port=port)
+            user = server["user"]
+            if user and len(user) > 0:
+                url = "{protocol}://{user}@{host}:{port}".format(user=user, protocol=protocol, host=host, port=port)
+            else:
+                url = "{protocol}://{host}:{port}".format(protocol=protocol, host=host, port=port)
             new_server = HTTPClient(url, self._network_manager)
             new_server.setLocal(False)
             self._remote_servers[server_id] = new_server

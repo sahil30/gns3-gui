@@ -58,11 +58,10 @@ class HTTPClient(QtCore.QObject):
         self._version = ""
 
         url_settings = urllib.parse.urlparse(url)
-        self.scheme = url_settings.scheme
-        self.host = url_settings.netloc.split(":")[0]
+        self.protocol = url_settings.scheme
+        self.host = url_settings.hostname
         self.port = url_settings.port
-        self.protocol = "http"
-        self.user = ""
+        self.user = url_settings.username
 
         self._connected = False
         self._local = True
@@ -82,7 +81,7 @@ class HTTPClient(QtCore.QObject):
         Called when a query start
         """
         if HTTPClient._progress_callback:
-            HTTPClient._progress_callback.add_query_signal.emit(query_id, "Waiting for {scheme}://{host}:{port}".format(scheme=self.scheme, host=self.host, port=self.port))
+            HTTPClient._progress_callback.add_query_signal.emit(query_id, "Waiting for {protocol}://{host}:{port}".format(protocol=self.protocol, host=self.host, port=self.port))
 
     def notify_progress_end_query(cls, query_id):
         """
@@ -109,7 +108,7 @@ class HTTPClient(QtCore.QObject):
     def url(self):
         """Returns current server url"""
 
-        return "{scheme}://{host}:{port}".format(scheme=self.scheme, host=self.host, port=self.port)
+        return "{protocol}://{host}:{port}".format(protocol=self.protocol, host=self.host, port=self.port)
 
     def id(self):
         """
@@ -158,7 +157,7 @@ class HTTPClient(QtCore.QObject):
         """
 
         try:
-            url = "{scheme}://{host}:{port}/v1/version".format(scheme=self.scheme, host=self.host, port=self.port)
+            url = "{protocol}://{host}:{port}/v1/version".format(protocol=self.protocol, host=self.host, port=self.port)
             response = urllib.request.urlopen(url, timeout=2)
             content_type = response.getheader("CONTENT-TYPE")
             if response.status == 200 and content_type == "application/json":
@@ -275,13 +274,13 @@ class HTTPClient(QtCore.QObject):
         """
 
         if error is not False:
-            msg = "Can't connect to server {}://{}:{}".format(self.scheme, self.host, self.port)
+            msg = "Can't connect to server {}://{}:{}".format(self.protocol, self.host, self.port)
             if callback is not None:
                 callback({"message": msg}, error=True, server=self)
             return
 
         if "version" not in params or "local" not in params:
-            msg = "The remote server {}://{}:{} is not a GNS 3 server".format(self.scheme, self.host, self.port)
+            msg = "The remote server {}://{}:{} is not a GNS 3 server".format(self.protocol, self.host, self.port)
             log.error(msg)
             if callback is not None:
                 callback({"message": msg}, error=True, server=self)
@@ -321,8 +320,8 @@ class HTTPClient(QtCore.QObject):
         context["query_id"] = str(uuid.uuid4())
         if showProgress:
             self.notify_progress_start_query(context["query_id"])
-        log.debug("{method} {scheme}://{host}:{port}/v1{path} {body}".format(method=method, scheme=self.scheme, host=self.host, port=self.port, path=path, body=body))
-        url = QtCore.QUrl("{scheme}://{host}:{port}/v1{path}".format(scheme=self.scheme, host=self.host, port=self.port, path=path))
+        log.debug("{method} {protocol}://{host}:{port}/v1{path} {body}".format(method=method, protocol=self.protocol, host=self.host, port=self.port, path=path, body=body))
+        url = QtCore.QUrl("{protocol}://{host}:{port}/v1{path}".format(protocol=self.protocol, host=self.host, port=self.port, path=path))
         request = self._request(url)
 
         request.setRawHeader("User-Agent", "GNS3 QT Client v{version}".format(version=__version__))

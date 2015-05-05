@@ -429,17 +429,31 @@
       </layout>
       <zorder>spacer_2</zorder>
       <zorder>uiRemoteServersTreeWidget</zorder>
-      <zorder>formLayoutWidget</zorder>
      </widget>
     </widget>
    </item>
   </layout>
  </widget>
  <tabstops>
-  <tabstop>uiLocalServerPathLineEdit</tabstop>
+  <tabstop>uiTabWidget</tabstop>
+  <tabstop>uiLocalServerAutoStartCheckBox</tabstop>
   <tabstop>uiLocalServerToolButton</tabstop>
+  <tabstop>uiLocalServerHostComboBox</tabstop>
   <tabstop>uiLocalServerPortSpinBox</tabstop>
+  <tabstop>uiConsoleConnectionsToAnyIPCheckBox</tabstop>
+  <tabstop>uiConsoleStartPortSpinBox</tabstop>
+  <tabstop>uiConsoleEndPortSpinBox</tabstop>
+  <tabstop>uiUDPStartPortSpinBox</tabstop>
+  <tabstop>uiUDPEndPortSpinBox</tabstop>
+  <tabstop>uiLocalServerPathLineEdit</tabstop>
+  <tabstop>uiRemoteServersTreeWidget</tabstop>
+  <tabstop>uiRemoteServerProtocolComboBox</tabstop>
+  <tabstop>uiRemoteServerPortLineEdit</tabstop>
   <tabstop>uiRemoteServerPortSpinBox</tabstop>
+  <tabstop>uiRemoteServerUserLineEdit</tabstop>
+  <tabstop>uiAddRemoteServerPushButton</tabstop>
+  <tabstop>uiDeleteRemoteServerPushButton</tabstop>
+  <tabstop>uiRestoreDefaultsPushButton</tabstop>
  </tabstops>
  <resources/>
  <connections/>
