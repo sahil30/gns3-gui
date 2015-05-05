@@ -74,7 +74,6 @@ class ServerPreferencesPage(QtWidgets.QWidget, Ui_ServerPreferencesPageWidget):
         else:
             self.uiRemoteServerPortSpinBox.setValue(8000)
 
-
     def _useLocalServerAutoStartSlot(self, state):
         """
         Slot to enable or not local server settings.

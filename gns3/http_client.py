@@ -422,7 +422,7 @@ class HTTPClient(QtCore.QObject):
                     callback(params, error=True, server=self, context=context)
                 else:
                     callback(params, server=self, context=context)
-        #response.deleteLater()
+        # response.deleteLater()
         if status == 400:
             raise HttpBadRequest(body)
 

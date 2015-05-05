@@ -26,7 +26,7 @@ def test_getServerFromString():
     assert server.protocol == "http"
     assert server.host == "127.0.0.1"
     assert server.port == 4000
-    assert server.user == None
+    assert server.user is None
 
 
 def test_getServerFromString_with_user():

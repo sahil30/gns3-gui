@@ -10,7 +10,9 @@
 import gns3.qt
 from gns3.qt import QtCore, QtGui, QtWidgets
 
+
 class Ui_ServerPreferencesPageWidget(object):
+
     def setupUi(self, ServerPreferencesPageWidget):
         ServerPreferencesPageWidget.setObjectName("ServerPreferencesPageWidget")
         ServerPreferencesPageWidget.resize(460, 536)
@@ -243,4 +245,3 @@ class Ui_ServerPreferencesPageWidget(object):
         self.uiAddRemoteServerPushButton.setText(_translate("ServerPreferencesPageWidget", "&Add"))
         self.uiDeleteRemoteServerPushButton.setText(_translate("ServerPreferencesPageWidget", "&Delete"))
         self.uiTabWidget.setTabText(self.uiTabWidget.indexOf(self.uiRemoteTabWidget), _translate("ServerPreferencesPageWidget", "Remote servers"))
-
