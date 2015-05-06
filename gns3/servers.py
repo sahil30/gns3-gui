@@ -28,7 +28,7 @@ import shutil
 import subprocess
 
 from .qt import QtGui, QtCore, QtNetwork, QtWidgets
-from .http_client import HTTPClient
+from .network_client import getNetworkClientInstance
 from .local_config import LocalConfig
 from .settings import LOCAL_SERVER_SETTINGS, LOCAL_SERVER_SETTING_TYPES
 from .local_server_config import LocalServerConfig
@@ -65,7 +65,7 @@ class Servers(QtCore.QObject):
         host = self._local_server_settings["host"]
         port = self._local_server_settings["port"]
         url = "http://{host}:{port}".format(host=host, port=port)
-        self._local_server = HTTPClient(url, self._network_manager)
+        self._local_server = getNetworkClientInstance(url, self._network_manager)
         self._local_server.setLocal(True)
         log.info("New local server connection {} registered".format(url))
 
@@ -142,10 +142,10 @@ class Servers(QtCore.QObject):
         # save the remote servers
         remote_servers = []
         for server in self._remote_servers.values():
-            remote_servers.append({"protocol": server.protocol,
-                                   "host": server.host,
-                                   "port": server.port,
-                                   "user": server.user})
+            remote_servers.append({"protocol": server.protocol(),
+                                   "host": server.host(),
+                                   "port": server.port(),
+                                   "user": server.user()})
         LocalConfig.instance().setSettings({"RemoteServers": remote_servers})
 
         # save some settings to the local server config files
@@ -184,7 +184,7 @@ class Servers(QtCore.QObject):
 
         if settings["host"] != self._local_server_settings["host"] or settings["port"] != self._local_server_settings["port"]:
             url = "http://{host}:{port}".format(host=settings["host"], port=settings["port"])
-            self._local_server = HTTPClient(url, self._network_manager)
+            self._local_server = getNetworkClientInstance(url, self._network_manager)
             self._local_server.setLocal(True)
             log.info("New local server connection {} registered".format(url))
 
@@ -215,8 +215,8 @@ class Servers(QtCore.QObject):
         """
 
         path = self.localServerPath()
-        host = self._local_server.host
-        port = self._local_server.port
+        host = self._local_server.host()
+        port = self._local_server.port()
         command = '"{executable}" --host {host} --port {port} --local'.format(executable=path,
                                                                               host=host,
                                                                               port=port)
@@ -312,7 +312,7 @@ class Servers(QtCore.QObject):
         if user and len(user) > 0:
             server_socket = "{user}@{server_socket}".format(user=user, server_socket=server_socket)
         url = "{protocol}://{server_socket}".format(protocol=protocol, server_socket=server_socket)
-        server = HTTPClient(url, self._network_manager)
+        server = getNetworkClientInstance(url, self._network_manager)
         server.setLocal(False)
         self._remote_servers[url] = server
         log.info("New remote server connection {} registered".format(url))
@@ -331,7 +331,7 @@ class Servers(QtCore.QObject):
         """
 
         for server in self._remote_servers.values():
-            if server.protocol == protocol and server.host == host and int(server.port) == int(port) and server.user == user:
+            if server.protocol() == protocol and server.host() == host and int(server.port()) == int(port) and server.user() == user:
                 return server
 
         return self._addRemoteServer(protocol, host, port, user)
@@ -377,7 +377,7 @@ class Servers(QtCore.QObject):
                 url = "{protocol}://{user}@{host}:{port}".format(user=user, protocol=protocol, host=host, port=port)
             else:
                 url = "{protocol}://{host}:{port}".format(protocol=protocol, host=host, port=port)
-            new_server = HTTPClient(url, self._network_manager)
+            new_server = getNetworkClientInstance(url, self._network_manager)
             new_server.setLocal(False)
             self._remote_servers[server_id] = new_server
             log.info("New remote server connection {} registered".format(url))

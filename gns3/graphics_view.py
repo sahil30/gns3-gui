@@ -393,8 +393,8 @@ class GraphicsView(QtWidgets.QGraphicsView):
                 QtWidgets.QMessageBox.critical(self, "Connection", "Sorry, you cannot connect a cloud to another cloud!")
                 return
 
-            source_host = source_item.node().server().host
-            destination_host = destination_item.node().server().host
+            source_host = source_item.node().server().host()
+            destination_host = destination_item.node().server().host()
 
             # check that the node can be connected to a cloud
             if (isinstance(source_item.node(), Cloud) or isinstance(destination_item.node(), Cloud)) and source_host != destination_host:
@@ -944,7 +944,7 @@ class GraphicsView(QtWidgets.QGraphicsView):
                     return False
             else:
                 console_port = node.console()
-            console_host = node.server().host
+            console_host = node.server().host()
             try:
                 from .telnet_console import telnetConsole
 
