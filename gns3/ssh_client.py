@@ -21,6 +21,7 @@ import paramiko
 
 
 class SSHClient(HTTPClient):
+
     """
     SSH client.
 
@@ -45,4 +46,3 @@ class SSHClient(HTTPClient):
 
     def protocol(self):
         return "ssh"
-

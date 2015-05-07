@@ -18,6 +18,7 @@
 from gns3.http_client import HTTPClient
 from gns3.ssh_client import SSHClient
 
+
 def getNetworkClientInstance(url, network_manager):
     """
     Based on url return a network client instance
